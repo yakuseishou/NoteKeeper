@@ -17,7 +17,7 @@ router.route('/').post((req, res) => {
     User.find({username: username, password: password})
         .then(user => {
             if (user[0]) {
-                res.json(user[0].username + " Logged in");
+                res.json(user[0]._id);
             } else {
                 res.status(400).json("No such User");
             }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import GoogleLogIn from "./GoogleLogIn";
 import LogInForm from "./LogInForm";
 
-function LogIn() {
+function LogIn(props) {
     const [auth, setAuth] = useState(false);
     
     function handleAuth() {
@@ -19,6 +19,7 @@ function LogIn() {
                   <div className="card-body">
                     <LogInForm
                         auth={handleAuth}
+                        setUser={props.setUser}
                     />
                     <div className="signUp">
                         <p>

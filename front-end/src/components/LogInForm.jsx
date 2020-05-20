@@ -23,27 +23,26 @@ function LogInForm(props) {
     }
 
     function submitUser(event) {
-        // props.validUser(user);
 
         Axios.post("http://localhost:5000/user/", user)
             .then(res => {
-                console.log(res.data);
+                props.setUser(res.data);
                 setRedirect(true);
             })
             .catch(err => {
                 props.auth();
                 console.log('Error: ' + err);
             });
-        
-        
+            
+            
         setUser({
             username: "",
             password: ""
         });
-
+        
         event.preventDefault();
-      }
-
+    }
+    
     function renderRedirect() {
         if (redirect) {
             return <Redirect to='/note' />;

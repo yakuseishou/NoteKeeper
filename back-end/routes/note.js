@@ -2,37 +2,42 @@ const router = require("express").Router();
 let Note = require('../models/note.model');
 let User = require('../models/user.model');
 
-router.route('/').get((req, res) => {
-    const id = req.body.user_id;
+router.route('/:id').get((req, res) => {
+    const id = req.params.id;
     User.findById(id)
         .then(user => res.json(user.notes))
         .catch(err => res.status(400).json("Error: " + err));
 });
 
 /*Create new entry */
-router.route('/add').post((req, res) => {
-    const id = req.body.user_id;
+router.route('/add/:id').post((req, res) => {
+    const id = req.params.id;
     const title = req.body.title;
     const content = req.body.content;
 
     const newNote = new Note({
-        title,
-        content
+        title: title,
+        content: content
     });
 
-    User.findById(id, (err, user)=> {
-            if (!err) {
-                user.notes.push(newNote);
-                user.save();
-            }
+    console.log(id);
+
+    User.findById(id)
+        .then(user => {
+            user.notes.push(newNote);
+            user.save()
+                .then(user => {
+                    console.log(user.notes);
+                    res.json(user.notes);
+                })
+                .catch(err => console.log("save error"));
         })
-        .then(() => res.json("User updated"))
-        .catch(err => res.status(400).json('Error: ' + err));
+        .catch(err => console.log("find error"));
 });
 
-router.route("/:id").delete((req, res) => {
-    const userId = req.body.user_id;
-    const noteId = req.body.note_id;
+router.route("/:user/:id").delete((req, res) => {
+    const userId = req.params.user;
+    const noteId = req.params.id;
     
     User.findById(userId)
     .then(user => {
