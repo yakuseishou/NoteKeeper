@@ -1,9 +1,23 @@
 import React, { useState } from "react";
+import {Redirect} from "react-router-dom";
 import GoogleLogIn from "./GoogleLogIn";
 import LogInForm from "./LogInForm";
 
 function LogIn(props) {
     const [auth, setAuth] = useState(false);
+    const [regi, setRegi] = useState(false);
+
+    function handleRegi() {
+      setRegi(true);
+    }
+  
+  
+    function renderRedirect() {
+      if (regi) {
+          return <Redirect to='/register' />;
+      }
+    }
+
     
     function handleAuth() {
         setAuth(true);
@@ -11,6 +25,7 @@ function LogIn(props) {
 
     return (
         <div className="container mt-5">
+        {renderRedirect()}
             <h1>Login</h1>
             {auth && <p>Incorrect Log in info please try again...</p>}
             <div className="row">
@@ -22,10 +37,10 @@ function LogIn(props) {
                         setUser={props.setUser}
                     />
                     <div className="signUp">
-                        <p>
+                        <div>
                             Don't have an account?
-                        </p>
-                        <a href="/register" className="btn btn-dark" role="button" aria-pressed="true">SignUp</a>
+                        </div>
+                          <button onClick={handleRegi} className="btn btn-dark">SignUp</button>
                     </div>
                   </div>
                 </div>

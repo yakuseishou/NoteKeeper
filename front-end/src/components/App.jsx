@@ -9,15 +9,22 @@ import Register from "./Register";
 function App() {
   const [userId, setUserId] = useState("false");
 
+  function setLogState() {
+    setUserId("false");
+  }
+
   return (
     <div>
       <Router>
-        <Header />
+        <Header logState={userId} setLogState={setLogState}/>
           <Route 
             path="/" 
-            exact render={(props) => <LogIn {...props} user_id={userId} setUser={setUserId} />}
+            exact render={(props) => <LogIn {...props} setUser={setUserId} />}
           />
-          <Route path="/register" component={Register} />
+          <Route 
+            path="/register" 
+            render={(props) => <Register {...props} setUser={setUserId} />}
+          />
           <Route
             path='/note'
             render={(props) => <DisplayNotes {...props} user_id={userId} />}

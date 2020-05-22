@@ -1,36 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
+import Axios from "axios";
 import GoogleLogIn from "./GoogleLogIn";
+import RegisterForm from "./RegisterForm";
 
-function Register() {
-    return (
-        <div className="container mt-5">
-            <h1>Register</h1>
+function Register(props) {
 
-            <div className="row">
-              <div className="col-sm-8">
-                <div className="card">
-                  <div className="card-body">
+  const [redirect, setRedirect] = useState(false);
 
-                    <form action="/register" method="POST">
-                      <div className="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" className="form-control" name="username"/>
-                      </div>
-                      <div className="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" className="form-control" name="password"/>
-                      </div>
-                      <button type="submit" className="btn btn-dark">Register</button>
-                    </form>
+  function renderRedirect() {
+      if (redirect) {
+          return <Redirect to='/note' />;
+      }
+  }
 
-                  </div>
-                </div>
-              </div>
-            <GoogleLogIn />
-
-            </div>
+  return (
+    <div className="container mt-5">
+      {renderRedirect()}
+      <h1>Register</h1>
+      <div className="row">
+        <div className="col-sm-8">
+          <RegisterForm
+            setRedirect={setRedirect}
+            setUser={props.setUser}
+          />
         </div>
-    );
+        <GoogleLogIn />
+      </div>
+    </div>
+  );
 }
 
 export default Register;
