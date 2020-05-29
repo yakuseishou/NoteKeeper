@@ -1,42 +1,57 @@
+
+const passport = require('passport');
 const router = require("express").Router();
 let User = require('../models/user.model');
 
-// router.route('/').get((req, res) => {
-//     const id = req.body.user_id;
-//     console.log(id);
-//     User.find({_id: id})
-//         .then(user => res.json(user))
-//         .catch(err => res.status(400).json("Error: " + err));
-// });
-
-
 /*Log in need to update to check password also*/
+
+router.route('/').get(
+    passport.authenticate('local'),
+        function(req, res) {
+          // If this function gets called, authentication was successful.
+          // `req.user` contains the authenticated user.
+          res.json(req.user._id);
+    }
+);
+
+
 router.route('/').post((req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    User.find({username: username, password: password})
-        .then(user => {
-            if (user[0]) {
-                res.json(user[0]._id);
-            } else {
-                res.status(400).json("No such User");
-            }
-        })
-        .catch(err => res.status(400).json("Error: " + err));
+
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password
+     });
+     
+     req.login(user, function(err, user) {
+        if (err) {
+             res.status(400).json("Error: " + err);
+        } else {
+            passport.authenticate("local") (req, res, function () {
+                console.log("user log in");
+                res.json(req.user._id);
+           });
+        }
+     });
 });
 
 /* none unique username response on front end (require to addd)*/
 router.route('/add').post((req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-
-    const newUser = new User({username: username, password: password});
-    newUser.save()
-        .then(user => {
-            console.log(user._id);
-            res.json(user._id)
-        })
-        .catch(err => res.status(400).json('Error: ' + err));
+    
+    User.register({username: req.body.username}, req.body.password, function(err, user) {
+        if (err) {
+            res.status(400).json('Error: ' + err);
+        } else {
+           passport.authenticate("local") (req, res, function () {
+                res.json(user._id);
+           });
+        }
+     });
 });
+
+router.route("/logout").get((req, res) => {
+    req.logout();
+    console.log("user log out");
+    res.status(200).json("Log out successful");
+ });
 
 module.exports = router;

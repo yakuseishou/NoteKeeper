@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {Redirect} from "react-router-dom";
+import axios from "axios";
 import HighlightIcon from "@material-ui/icons/Highlight";
 
 function Header(props) {
@@ -7,8 +8,16 @@ function Header(props) {
   const [redirect, setRedirect] = useState(false);
 
   function logOut() {
-    props.setLogState();
-    setRedirect(true);
+    axios.get("http://localhost:5000/user/logout")
+    .then(res => {
+      console.log(res);
+      props.setLogState(false);
+      setRedirect(true);
+    }
+    )
+    .catch(err => {
+      console.log(err);
+    });
   }
 
 
@@ -26,7 +35,7 @@ function Header(props) {
         <HighlightIcon />
         Keeper
       </a>
-      {(props.logState != "false") && 
+      {(props.logState) && 
       <button onClick={logOut} className="btn btn-dark logout-btn">LogOut</button>
       }
       </h1>

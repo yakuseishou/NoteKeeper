@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import axios from "axios";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import DisplayNotes from "./DisplayNotes";
@@ -7,16 +8,13 @@ import LogIn from "./LogIn";
 import Register from "./Register";
 
 function App() {
-  const [userId, setUserId] = useState("false");
 
-  function setLogState() {
-    setUserId("false");
-  }
+  const [userId, setUserId] = useState(false);
 
   return (
     <div>
       <Router>
-        <Header logState={userId} setLogState={setLogState}/>
+        <Header logState={userId} setLogState={setUserId}/>
           <Route 
             path="/" 
             exact render={(props) => <LogIn {...props} setUser={setUserId} />}
@@ -27,7 +25,7 @@ function App() {
           />
           <Route
             path='/note'
-            render={(props) => <DisplayNotes {...props} user_id={userId} />}
+            render={(props) => <DisplayNotes {...props} user_id={userId} setLog={setUserId} />}
           />
       </Router>
       <Footer />

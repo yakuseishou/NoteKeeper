@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 
 function RegisterForm(props) {
     const [pwError, setPWError] = useState(false);
@@ -25,7 +25,7 @@ function RegisterForm(props) {
       function addUser(event) {
     
         if (user.password === user.confirm) {
-            Axios.post("http://localhost:5000/user/add", user)
+            axios.post("http://localhost:5000/user/add", user)
             .then(res => {
               props.setUser(res.data);
               props.setRedirect(true);

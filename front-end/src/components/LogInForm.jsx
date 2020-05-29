@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {Redirect} from "react-router-dom";
-import Axios from "axios";
+import axios from "axios";
 
 function LogInForm(props) {
     
@@ -24,8 +24,9 @@ function LogInForm(props) {
 
     function submitUser(event) {
 
-        Axios.post("http://localhost:5000/user/", user)
+        axios.post("http://localhost:5000/user/", user)
             .then(res => {
+                console.log(res.data);
                 props.setUser(res.data);
                 setRedirect(true);
             })

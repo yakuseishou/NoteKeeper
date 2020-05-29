@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import Axios from "axios";
 import GoogleLogIn from "./GoogleLogIn";
 import RegisterForm from "./RegisterForm";
 

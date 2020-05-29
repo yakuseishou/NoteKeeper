@@ -34,13 +34,12 @@ function DisplayNotes(props) {
         return noteItem._id !== id;
       });
     });
-    console.log(id);
     axios.delete("http://localhost:5000/note/"+ props.user_id + "/" + id)
       .then(res => console.log(res.data));
   }
 
   function renderRedirect() {
-    if (redirect) {
+    if (!props.user_id || redirect) {
         return <Redirect to='/' />;
     }
   }
